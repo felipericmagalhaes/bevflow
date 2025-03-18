@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:7.0
+    container_name: bevflow_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongo-data:/data/db
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: bevflow_rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+
+  api:
+    build: .
+    container_name: bevflow_api
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017/bevflowdb
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=admin
+      - SPRING_RABBITMQ_PASSWORD=admin
+      - DD_API_KEY=<SUA_API_KEY>
+      - DD_AGENT_HOST=datadog-agent
+    depends_on:
+      - mongo
+      - rabbitmq
+      - datadog-agent
+
+  datadog-agent:
+    image: datadog/agent:latest
+    container_name: bevflow_datadog
+    environment:
+      - DD_API_KEY=<API_KEY>
+      - DD_SITE=datadoghq.com
+      - DD_APM_ENABLED=true
+      - DD_LOGS_ENABLED=true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc/:/host/proc/:ro
+      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
