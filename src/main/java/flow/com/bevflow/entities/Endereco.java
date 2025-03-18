@@ -1,15 +1,13 @@
 package flow.com.bevflow.entities;
 
+import lombok.Builder;
+import lombok.Data;
+
 @Data
 @Builder
-@Document(collection = "revendas")
-public class Revenda {
-    @Id private String id;
-    private String cnpj;
-    private String razaoSocial;
-    private String nomeFantasia;
-    private String email;
-    private List<String> telefones;
-    private List<Contato> contatos;
-    private List<Endereco> enderecosEntrega;
+public class Endereco {
+    private String logradouro;
+    private String numero;
+    private String cidade;
+    private String cep;
 }

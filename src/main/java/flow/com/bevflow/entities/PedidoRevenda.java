@@ -1,15 +1,21 @@
 package flow.com.bevflow.entities;
 
+import lombok.Builder;
+import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Data
 @Builder
-@Document(collection = "revendas")
-public class Revenda {
-    @Id private String id;
-    private String cnpj;
-    private String razaoSocial;
-    private String nomeFantasia;
-    private String email;
-    private List<String> telefones;
-    private List<Contato> contatos;
-    private List<Endereco> enderecosEntrega;
+@Document(collection = "pedidos_revenda")
+public class PedidoRevenda {
+    @Id
+    private String id;
+    private String revendaId;
+    private Cliente cliente;
+    private List<ItemPedido> itens;
+    private LocalDateTime criadoEm;
 }

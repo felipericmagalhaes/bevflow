@@ -1,4 +1,10 @@
 package flow.com.bevflow.repositories;
 
-public interface PedidoRevendaRepository extends MongoRepository<PedidoRevenda, String> {}
+import flow.com.bevflow.entities.Revenda;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
+import java.util.Optional;
+
+public interface RevendaRepository extends MongoRepository<Revenda, String> {
+    Optional<Revenda> findByCnpj(String cnpj);
+}
